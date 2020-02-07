@@ -18,7 +18,6 @@ import java.util.zip.Inflater;
 
 @Slf4j
 public class PobImporter implements Importer {
-    private static final Pattern NEWLINE_CHARS = Pattern.compile("[\\n\\t ]");
 
     @Override
     public PathOfBuilding importBuild(String link) {
@@ -57,19 +56,5 @@ public class PobImporter implements Importer {
         return inflatedXml;
     }
 
-    private static String inflate(byte[] data) throws IOException, DataFormatException {
-        Inflater inflater = new Inflater();
-        inflater.setInput(data);
-        byte[] output;
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length)) {
-            byte[] buffer = new byte[1024];
-            while (!inflater.finished()) {
-                int count = inflater.inflate(buffer);
-                outputStream.write(buffer, 0, count);
-            }
-            output = outputStream.toByteArray();
-        }
-        return new String(output, StandardCharsets.UTF_8);
-    }
 }
 

@@ -9,9 +9,9 @@ import lombok.Data;
 public class Slot {
 
     @JacksonXmlProperty(isAttribute = true)
-    private String itemId;
+    private String name;
 
     @JacksonXmlProperty(isAttribute = true)
-    private String name;
+    private String itemId;
 
 }

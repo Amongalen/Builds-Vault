@@ -9,9 +9,9 @@ import lombok.Data;
 public class Socket {
 
     @JacksonXmlProperty(isAttribute = true)
-    private String itemId;
+    private String nodeId;
 
     @JacksonXmlProperty(isAttribute = true)
-    private String nodeId;
+    private String itemId;
 
 }

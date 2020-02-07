@@ -7,14 +7,18 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PathOfBuilding {
+    @JsonProperty("Build")
+    private Build build;
+    @JsonProperty("Calcs")
+    private Calcs calcs;
     @JsonProperty("Skills")
     private Skills skills;
     @JsonProperty("Tree")
     private Tree tree;
-    @JsonProperty("Items")
-    private Items items;
     @JsonProperty("Notes")
     private String notes;
-
-
+    @JsonProperty("TreeView")
+    private TreeView treeView;
+    @JsonProperty("Items")
+    private Items items;
 }

@@ -17,21 +17,6 @@ public class PobExporter implements Exporter {
 
     @Override
     public String exportBuild(PathOfBuilding build) {
-//        try {
-//            String replace = input.replace('-', '+').replace('_', '/').trim();
-//            byte[] bytes = replace.getBytes(StandardCharsets.UTF_8);
-//            byte[] byteValueBase64Decoded = Base64.getDecoder().decode(bytes);
-//            byte[] decompressed = CompressionUtils.decompress(byteValueBase64Decoded);
-//            byte[] compress = CompressionUtils.compress(decompressed);
-//
-//            byte[] byteValueBase64encoded = Base64.getEncoder().encode(compress);
-//            String encodedString = new String(byteValueBase64encoded, StandardCharsets.UTF_8);
-//            String result = encodedString.replace('+', '-').replace('/', '_');
-//
-//        } catch (IOException | DataFormatException e) {
-//            e.printStackTrace();
-//        }
-
         JacksonXmlModule xmlModule = new JacksonXmlModule();
         xmlModule.setDefaultUseWrapper(false);
         XmlMapper xmlMapper = new XmlMapper(xmlModule);
@@ -40,7 +25,6 @@ public class PobExporter implements Exporter {
         String pobString = null;
         try {
             String xml = xmlMapper.writeValueAsString(build);
-            log.info("xml: {}", xml);
             pobString = convertToDeflatedBase64(xml);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
