@@ -8,23 +8,22 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Gem {
-    @JsonProperty("gemID")
+    @JacksonXmlProperty(isAttribute = true)
+    private String enableGlobal2;
+    @JacksonXmlProperty(isAttribute = true)
+    private String quality;
+    @JacksonXmlProperty(isAttribute = true)
+    private String level;
     @JacksonXmlProperty(isAttribute = true)
     private String gemId;
     @JacksonXmlProperty(isAttribute = true)
     private String skillId;
     @JacksonXmlProperty(isAttribute = true)
-    private String nameSpec;
-    @JacksonXmlProperty(isAttribute = true)
-    private String level;
-    @JacksonXmlProperty(isAttribute = true)
     private String enableGlobal1;
-    @JacksonXmlProperty(isAttribute = true)
-    private String enableGlobal2;
     @JacksonXmlProperty(isAttribute = true)
     private String enabled;
     @JacksonXmlProperty(isAttribute = true)
-    private String quality;
+    private String nameSpec;
 
 
 }

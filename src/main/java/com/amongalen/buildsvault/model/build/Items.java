@@ -13,14 +13,17 @@ public class Items {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("Item")
     private Item[] item;
-    @JsonProperty("ItemSet")
-    private ItemSet itemSet;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("Slot")
     private Slot[] slot;
+
+    @JsonProperty("ItemSet")
+    private ItemSet itemSet;
+
     @JacksonXmlProperty(isAttribute = true)
     private String activeItemSet;
+
     @JacksonXmlProperty(isAttribute = true)
     private String useSecondWeaponSet;
 }

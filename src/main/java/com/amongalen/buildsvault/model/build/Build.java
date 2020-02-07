@@ -16,6 +16,8 @@ public class Build {
     @JacksonXmlProperty(isAttribute = true)
     String targetVersion;
     @JacksonXmlProperty(isAttribute = true)
+    String bandit;
+    @JacksonXmlProperty(isAttribute = true)
     String banditNormal;
     @JacksonXmlProperty(isAttribute = true)
     String banditCruel;
