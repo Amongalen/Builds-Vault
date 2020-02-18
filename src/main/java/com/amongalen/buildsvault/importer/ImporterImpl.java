@@ -1,29 +1,34 @@
 package com.amongalen.buildsvault.importer;
 
-import com.amongalen.buildsvault.exporter.CompressionUtils;
 import com.amongalen.buildsvault.model.build.PathOfBuilding;
+import com.amongalen.buildsvault.model.build.TreeNode;
+import com.amongalen.buildsvault.util.CompressionUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
 
 @Slf4j
-public class PobImporter implements Importer {
+public class ImporterImpl implements Importer {
+    private static final Pattern TREE_LINK_PREFIX = Pattern.compile(".*passive-skill-tree/");
 
     @Override
-    public PathOfBuilding importBuild(String link) {
+    public PathOfBuilding importBuild(String pobLink) {
         PathOfBuilding pathOfBuilding = null;
         try {
-            String xml = extractFromPobPastebin(link);
+            String xml = base64ToXml(pobLink);
             JacksonXmlModule xmlModule = new JacksonXmlModule();
             xmlModule.setDefaultUseWrapper(false);
             XmlMapper xmlMapper = new XmlMapper(xmlModule);
@@ -34,7 +39,35 @@ public class PobImporter implements Importer {
         return pathOfBuilding;
     }
 
-    static String extractFromPobPastebin(String raw) {
+    @Override
+    public List<TreeNode> extractTreeNodes(String treeLink) {
+        String raw = TREE_LINK_PREFIX.matcher(treeLink).replaceAll("");
+        raw = "AAAABAMBABslS65tGdlb34rpAg==";
+        String treeXml = base64ToXml2(raw);
+        return Collections.emptyList();
+    }
+
+    static String base64ToXml2(String rawUrl) {
+        try {
+            String replaced = rawUrl.replace('-', '+').replace('_', '/');
+            byte[] byteValuesBase64Decoded = Base64.getDecoder().decode(replaced);
+            ByteBuffer byteBuffer = ByteBuffer.wrap(byteValuesBase64Decoded);
+            int version = byteBuffer.getInt();
+            byte charactersId = byteBuffer.get();
+            byte ascendancyId = byteBuffer.get();
+            byte isLocked = byteBuffer.get();
+            CharBuffer charBuffer = byteBuffer.asCharBuffer();
+            List<Integer> nodes = charBuffer.chars().boxed().collect(Collectors.toList());
+            System.out.println(nodes);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    static String base64ToXml(String raw) {
 
         byte[] byteValueBase64Decoded;
         try {

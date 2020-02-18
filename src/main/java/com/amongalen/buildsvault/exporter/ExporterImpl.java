@@ -1,6 +1,7 @@
 package com.amongalen.buildsvault.exporter;
 
 import com.amongalen.buildsvault.model.build.PathOfBuilding;
+import com.amongalen.buildsvault.util.CompressionUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
@@ -13,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Slf4j
-public class PobExporter implements Exporter {
+public class ExporterImpl implements Exporter {
 
     @Override
     public String exportBuild(PathOfBuilding build) {
@@ -25,14 +26,14 @@ public class PobExporter implements Exporter {
         String pobString = null;
         try {
             String xml = xmlMapper.writeValueAsString(build);
-            pobString = convertToDeflatedBase64(xml);
+            pobString = xmlToBase64(xml);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return pobString;
     }
 
-    static String convertToDeflatedBase64(String xml) {
+    static String xmlToBase64(String xml) {
         byte[] bytes = xml.getBytes(StandardCharsets.UTF_8);
         String result = null;
         try {

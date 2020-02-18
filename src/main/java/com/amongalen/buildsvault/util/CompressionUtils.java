@@ -1,4 +1,4 @@
-package com.amongalen.buildsvault.exporter;
+package com.amongalen.buildsvault.util;
 
 import lombok.extern.slf4j.Slf4j;
 
