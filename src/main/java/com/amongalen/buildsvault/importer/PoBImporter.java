@@ -5,7 +5,6 @@ import com.amongalen.buildsvault.model.build.TreeNode;
 
 import java.util.List;
 
-public interface Importer {
+public interface PoBImporter {
     public PathOfBuilding importBuild(String pobLink);
-    public List<TreeNode> extractTreeNodes(String treeLink);
 }
