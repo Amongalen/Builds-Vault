@@ -1,32 +1,33 @@
 package com.amongalen.buildsvault.importer;
 
-import com.amongalen.buildsvault.model.build.Skill;
 import com.amongalen.buildsvault.model.build.TreeNode;
 import com.amongalen.buildsvault.util.SkillTreeData;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Service
+@AllArgsConstructor
 public class TreeImporterImpl implements TreeImporter {
 
-    @Autowired
-    SkillTreeData skillTreeData;
-
-    private static final Pattern TREE_LINK_PREFIX = Pattern.compile(".*passive-skill-tree/");
+    final SkillTreeData skillTreeData;
 
     @Override
     public List<TreeNode> importTreeKeystones(String treeUrl) {
-        String raw = TREE_LINK_PREFIX.matcher(treeUrl).replaceAll("");
-        List<Integer> nodeIds = parseNodeIdsFromTreeUrl(raw);
+        String[] urlParts = treeUrl.split("/");
+        String urlEnd = urlParts[urlParts.length - 1];
+        if (urlEnd.isBlank()) {
+            urlEnd = urlParts[urlParts.length - 2];
+        }
+        List<Integer> nodeIds = parseNodeIdsFromTreeUrl(urlEnd);
         List<TreeNode> treeKeystones = new ArrayList<>();
         if (nodeIds != null) {
             for (Integer nodeId : nodeIds) {
@@ -40,9 +41,9 @@ public class TreeImporterImpl implements TreeImporter {
         return treeKeystones;
     }
 
-    static List<Integer> parseNodeIdsFromTreeUrl(String rawUrl) {
+    private static List<Integer> parseNodeIdsFromTreeUrl(String rawUrl) {
         try {
-            String replaced = rawUrl.replace('-', '+').replace('_', '/');
+            String replaced = rawUrl.replace('-', '+').replace('_', '/').trim();
             byte[] byteValuesBase64Decoded = Base64.getDecoder().decode(replaced);
             ByteBuffer byteBuffer = ByteBuffer.wrap(byteValuesBase64Decoded);
 //            int version = byteBuffer.getInt();

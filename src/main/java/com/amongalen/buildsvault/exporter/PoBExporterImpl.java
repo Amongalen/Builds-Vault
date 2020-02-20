@@ -8,13 +8,15 @@ import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Slf4j
-public class ExporterImpl implements Exporter {
+@Service
+public class PoBExporterImpl implements PoBExporter {
 
     @Override
     public String exportBuild(PathOfBuilding build) {

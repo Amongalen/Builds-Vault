@@ -29,6 +29,9 @@ public class SkillTreeData {
         String filename = "390_V2/data.txt";
         init(filename);
     }
+    public SkillTreeData(String filename) {
+        init(filename);
+    }
 
     public boolean isKeystone(Integer id) {
         return nodeMapping.containsKey(id);
@@ -56,7 +59,7 @@ public class SkillTreeData {
                     }
                 }
             } catch (JsonProcessingException e) {
-                log.error("Problem occured while loading skill tree data", e);
+                log.error("Problem occurred while loading skill tree data", e);
             }
         }
     }
