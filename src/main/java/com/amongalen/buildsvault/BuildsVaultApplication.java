@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @AllArgsConstructor
 @Slf4j
-public class BuildsvaultApplication {
+public class BuildsVaultApplication {
     public static void main(String[] args) {
-        SpringApplication.run(BuildsvaultApplication.class, args);
+        SpringApplication.run(BuildsVaultApplication.class, args);
     }
 }

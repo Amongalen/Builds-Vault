@@ -1,7 +1,9 @@
 package com.amongalen.buildsvault.service;
 
-import org.springframework.stereotype.Service;
+import com.amongalen.buildsvault.model.BuildGuide;
 
-@Service
-public class BuildGuideService {
+import java.util.List;
+
+public interface BuildGuideService {
+    List<BuildGuide> getAllGuides();
 }
