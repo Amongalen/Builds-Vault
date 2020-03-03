@@ -13,9 +13,11 @@ public class BuildGuide {
 
     private String name;
     private PathOfBuilding pathOfBuilding;
+    private String text;
 
     public BuildGuide(String name, PathOfBuilding pathOfBuilding) {
         this.name = name;
         this.pathOfBuilding = pathOfBuilding;
     }
+
 }

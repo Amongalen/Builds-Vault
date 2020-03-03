@@ -11,7 +11,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-public class IndexController {
+public class BuildListController {
 
     private final BuildGuideService buildGuideService;
 

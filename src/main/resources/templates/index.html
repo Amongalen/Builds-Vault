@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Recipe Home</title>
+    <title>Builds Vault</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link type="text/css" href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{css/bootstrap.min.css}"/>
+    <link type="text/css" href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{css/bootstrap.css}"
+          media="screen"/>
+<!--    <link type="text/css" href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{css/bootstrap.min.css}"/>-->
     <link type="text/css" href="../static/css/core.css" rel="stylesheet" th:href="@{css/core.css}"/>
 </head>
-<body>
+<body class="bg-secondary">
 <div th:replace="fragments/header :: header">
 </div>
-<table>
-    <tr th:each="guide : ${guides}">
-
-        <td>
-            <h4><span th:text="${guide.name}">Test Build <br></span></h4>
-            <span th:each="keystone : ${guide.pathOfBuilding.keystones}">
+<div class="p-2 container-xl bg-dark rounded-lg">
+    <table>
+        <tr th:each="guide : ${guides}">
+            <td>
+                <h4><a th:text="${guide.name}" th:href="@{/buildGuide(id=${guide.id})}">Test Build</a></h4>
+                <span th:each="keystone : ${guide.pathOfBuilding.keystones}">
                 <span th:text="${keystone.name}">Some keystone</span>
             </span>
-        </td>
-    </tr>
-</table>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>
