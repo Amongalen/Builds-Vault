@@ -6,18 +6,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link type="text/css" href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{css/bootstrap.css}"
           media="screen"/>
-<!--    <link type="text/css" href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{css/bootstrap.min.css}"/>-->
     <link type="text/css" href="../static/css/core.css" rel="stylesheet" th:href="@{css/core.css}"/>
 </head>
 <body class="bg-secondary">
 <div th:replace="fragments/header :: header">
 </div>
 <div class="p-2 container-xl bg-dark rounded-lg">
-    <table>
-        <tr th:each="guide : ${guides}">
-            <td>
-                <h4><a th:text="${guide.name}" th:href="@{/buildGuide(id=${guide.id})}">Test Build</a></h4>
-                <span th:each="keystone : ${guide.pathOfBuilding.keystones}">
+    <table class="table table-borderless">
+        <tr th:each="guide : ${guides}" style="cursor: pointer"
+            th:data-thing="${guide.id}" onclick="rowClicked(this.getAttribute('data-thing'));">
+            <td class="align-content-center">
+                <h4 style="color: #917066"><b th:text="${guide.name}">Test Build</b></h4>
+                Notables: <span th:each="keystone : ${guide.pathOfBuilding.keystones}">
                 <span th:text="${keystone.name}">Some keystone</span>
             </span>
             </td>
@@ -25,4 +25,9 @@
     </table>
 </div>
 </body>
+<script>
+    function rowClicked(value) {
+        location.href = "/buildGuide?id=" + value;
+    }
+</script>
 </html>
