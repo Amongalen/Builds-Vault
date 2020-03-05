@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -26,7 +25,7 @@ public class SkillTreeData {
     Map<Integer, String> nodeMapping = new HashMap<>();
 
     public SkillTreeData() {
-        String filename = "390_V2/data.txt";
+        String filename = "tree/390_V2/data.txt";
         init(filename);
     }
     public SkillTreeData(String filename) {
