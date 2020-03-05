@@ -20,6 +20,7 @@ public class Spec {
     @JacksonXmlElementWrapper(localName = "Sockets")
     private Socket[] socket;
 
-
-
+    public String getTrimmedUrl() {
+        return url.trim();
+    }
 }
