@@ -1,7 +1,7 @@
 package com.amongalen.buildsvault.model;
 
-import com.amongalen.buildsvault.importer.TreeImporter;
 import com.amongalen.buildsvault.model.pob.PoBPathOfBuilding;
+import com.amongalen.buildsvault.model.tree.TreeNode;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -1,6 +1,6 @@
 package com.amongalen.buildsvault.importer;
 
-import com.amongalen.buildsvault.model.TreeNode;
+import com.amongalen.buildsvault.model.tree.TreeNode;
 
 import java.util.List;
 

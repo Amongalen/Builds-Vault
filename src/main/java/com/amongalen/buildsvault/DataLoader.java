@@ -4,7 +4,7 @@ package com.amongalen.buildsvault;
 import com.amongalen.buildsvault.importer.PoBImporter;
 import com.amongalen.buildsvault.importer.TreeImporter;
 import com.amongalen.buildsvault.model.BuildGuide;
-import com.amongalen.buildsvault.model.TreeNode;
+import com.amongalen.buildsvault.model.tree.TreeNode;
 import com.amongalen.buildsvault.model.pob.PoBPathOfBuilding;
 import com.amongalen.buildsvault.repository.BuildGuideRepository;
 import lombok.AllArgsConstructor;

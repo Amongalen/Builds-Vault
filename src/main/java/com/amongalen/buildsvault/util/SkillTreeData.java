@@ -1,7 +1,7 @@
 package com.amongalen.buildsvault.util;
 
+import com.amongalen.buildsvault.model.tree.PassiveTreeData;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -13,38 +13,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @Component
 @Slf4j
 public class SkillTreeData {
     private static final Pattern JSON_PREFIX = Pattern.compile(".*=");
-    Map<Integer, String> nodeMapping = new HashMap<>();
+    PassiveTreeData passiveTreeData;
 
     public SkillTreeData() {
         String filename = "tree/390_V2/data.txt";
         init(filename);
     }
+
     public void init(String filename) {
         String json = readJson(filename);
         if (json != null) {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                JsonNode jsonTree = mapper.readTree(json);
-                JsonNode nodes = jsonTree.get("nodes");
-                for (Iterator<Map.Entry<String, JsonNode>> it = nodes.fields(); it.hasNext(); ) {
-                    Map.Entry<String, JsonNode> node = it.next();
-                    JsonNode nodeDetails = node.getValue();
-                    String nodeName = nodeDetails.get("dn").asText();
-                    Integer nodeId = Integer.valueOf(node.getKey());
-                    boolean isKeystone = nodeDetails.get("ks").asBoolean();
-                    if (isKeystone) {
-                        nodeMapping.put(nodeId, nodeName);
-                    }
-                }
+                passiveTreeData = mapper.readValue(json, PassiveTreeData.class);
             } catch (JsonProcessingException e) {
                 log.error("Problem occurred while loading skill tree data", e);
             }
@@ -56,12 +43,13 @@ public class SkillTreeData {
     }
 
     public boolean isKeystone(Integer id) {
-        return nodeMapping.containsKey(id);
+        return passiveTreeData.getNodes().get(id).isKeystone();
     }
 
-    public String getNameIfKeystone(Integer id) {
-        return nodeMapping.get(id);
+    public String getNameById(Integer id) {
+        return passiveTreeData.getNodes().get(id).getName();
     }
+
 
     private static String readJson(String filename) {
         try {

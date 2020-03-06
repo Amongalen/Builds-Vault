@@ -1,6 +1,6 @@
 package com.amongalen.buildsvault.importer;
 
-import com.amongalen.buildsvault.model.TreeNode;
+import com.amongalen.buildsvault.model.tree.TreeNode;
 import com.amongalen.buildsvault.util.SkillTreeData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +32,10 @@ public class TreeImporterImpl implements TreeImporter {
         if (nodeIds != null) {
             for (Integer nodeId : nodeIds) {
                 if (skillTreeData.isKeystone(nodeId)) {
-                    String nodeName = skillTreeData.getNameIfKeystone(nodeId);
-                    TreeNode treeNode = new TreeNode(nodeId, nodeName);
+                    String nodeName = skillTreeData.getNameById(nodeId);
+                    TreeNode treeNode = new TreeNode();
+                    treeNode.setId(nodeId);
+                    treeNode.setName(nodeName);
                     treeKeystones.add(treeNode);
                 }
             }
