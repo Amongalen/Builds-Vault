@@ -1,4 +1,4 @@
-package com.amongalen.buildsvault.model.build;
+package com.amongalen.buildsvault.model.pob;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -6,9 +6,11 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlayerStat {
+public class PoBCalcsInput {
     @JacksonXmlProperty(isAttribute = true)
-    String stat;
+    String name;
     @JacksonXmlProperty(isAttribute = true)
-    String value;
+    String number;
+    @JacksonXmlProperty(isAttribute = true)
+    String string;
 }

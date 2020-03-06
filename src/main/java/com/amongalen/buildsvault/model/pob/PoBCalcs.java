@@ -1,4 +1,4 @@
-package com.amongalen.buildsvault.model.build;
+package com.amongalen.buildsvault.model.pob;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Calcs {
+public class PoBCalcs {
     @JsonProperty("Input")
-    CalcsInput[] inputs;
+    PoBCalcsInput[] inputs;
 
     @JsonProperty("Section")
-    CalcsSection[] sections;
+    PoBCalcsSection[] sections;
 }

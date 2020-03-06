@@ -1,9 +1,12 @@
 package com.amongalen.buildsvault.model;
 
-import com.amongalen.buildsvault.model.build.PathOfBuilding;
+import com.amongalen.buildsvault.importer.TreeImporter;
+import com.amongalen.buildsvault.model.pob.PoBPathOfBuilding;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Data
 @Document(collection = "BuildGuide")
@@ -12,12 +15,14 @@ public class BuildGuide {
     private String id;
 
     private String name;
-    private PathOfBuilding pathOfBuilding;
+    private PoBPathOfBuilding pathOfBuilding;
     private String text;
+    private List<TreeNode> keystones;
 
-    public BuildGuide(String name, PathOfBuilding pathOfBuilding) {
+    public BuildGuide(String name, PoBPathOfBuilding pathOfBuilding) {
         this.name = name;
         this.pathOfBuilding = pathOfBuilding;
+
     }
 
 }

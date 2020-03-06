@@ -1,26 +1,26 @@
-package com.amongalen.buildsvault.model.build;
+package com.amongalen.buildsvault.model.pob;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Data;
 
-import java.util.Arrays;
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Skill {
+public class PoBSkills {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("Skill")
+    private PoBSkill[] skill;
     @JacksonXmlProperty(isAttribute = true)
-    private String mainActiveSkillCalcs;
+    private String defaultGemLevel;
     @JacksonXmlProperty(isAttribute = true)
-    private String enabled;
+    private String defaultGemQuality;
     @JacksonXmlProperty(isAttribute = true)
-    private String slot;
+    private String showSupportGemTypes;
     @JacksonXmlProperty(isAttribute = true)
-    private String mainActiveSkill;
-    @JsonProperty("Gem")
-    private Gem[] gems;
+    @JsonProperty("sortGemsByDPS")
+    private String sortGemsByDps;
 
 
 }

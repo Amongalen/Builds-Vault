@@ -1,6 +1,6 @@
 package com.amongalen.buildsvault.exporter;
 
-import com.amongalen.buildsvault.model.build.PathOfBuilding;
+import com.amongalen.buildsvault.model.pob.PoBPathOfBuilding;
 import com.amongalen.buildsvault.util.CompressionUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -19,7 +19,7 @@ import java.util.Base64;
 public class PoBExporterImpl implements PoBExporter {
 
     @Override
-    public String exportBuild(PathOfBuilding build) {
+    public String exportBuild(PoBPathOfBuilding build) {
         JacksonXmlModule xmlModule = new JacksonXmlModule();
         xmlModule.setDefaultUseWrapper(false);
         XmlMapper xmlMapper = new XmlMapper(xmlModule);

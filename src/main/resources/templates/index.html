@@ -17,7 +17,7 @@
             th:data-thing="${guide.id}" onclick="rowClicked(this.getAttribute('data-thing'));">
             <td class="align-content-center">
                 <h4 style="color: #917066"><b th:text="${guide.name}">Test Build</b></h4>
-                Notables: <span th:each="keystone : ${guide.pathOfBuilding.keystones}">
+                Notables: <span th:each="keystone : ${guide.keystones}">
                 <span th:text="${keystone.name}">Some keystone</span>
             </span>
             </td>

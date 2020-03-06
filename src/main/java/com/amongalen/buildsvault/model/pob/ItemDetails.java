@@ -1,4 +1,4 @@
-package com.amongalen.buildsvault.model.build;
+package com.amongalen.buildsvault.model.pob;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

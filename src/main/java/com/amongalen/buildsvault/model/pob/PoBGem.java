@@ -1,4 +1,4 @@
-package com.amongalen.buildsvault.model.build;
+package com.amongalen.buildsvault.model.pob;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -6,18 +6,23 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TreeView {
+public class PoBGem {
+    @JacksonXmlProperty(isAttribute = true)
+    private String enableGlobal2;
+    @JacksonXmlProperty(isAttribute = true)
+    private String quality;
+    @JacksonXmlProperty(isAttribute = true)
+    private String level;
+    @JacksonXmlProperty(isAttribute = true)
+    private String gemId;
+    @JacksonXmlProperty(isAttribute = true)
+    private String skillId;
+    @JacksonXmlProperty(isAttribute = true)
+    private String enableGlobal1;
+    @JacksonXmlProperty(isAttribute = true)
+    private String enabled;
+    @JacksonXmlProperty(isAttribute = true)
+    private String nameSpec;
 
-    @JacksonXmlProperty(isAttribute = true)
-    String searchStr;
-    @JacksonXmlProperty(isAttribute = true)
-    String zoomY;
-    @JacksonXmlProperty(isAttribute = true)
-    String showHeatMap;
-    @JacksonXmlProperty(isAttribute = true)
-    String zoomLevel;
-    @JacksonXmlProperty(isAttribute = true)
-    String showStatDifferences;
-    @JacksonXmlProperty(isAttribute = true)
-    String zoomX;
+
 }

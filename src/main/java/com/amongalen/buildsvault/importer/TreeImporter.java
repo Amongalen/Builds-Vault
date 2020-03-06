@@ -1,9 +1,9 @@
 package com.amongalen.buildsvault.importer;
 
-import com.amongalen.buildsvault.model.build.TreeNode;
+import com.amongalen.buildsvault.model.TreeNode;
 
 import java.util.List;
 
 public interface TreeImporter {
-    public List<TreeNode> importTreeKeystones(String treeUrl);
+    List<TreeNode> importTreeKeystones(String treeUrl);
 }

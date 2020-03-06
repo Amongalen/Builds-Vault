@@ -1,4 +1,4 @@
-package com.amongalen.buildsvault.model.build;
+package com.amongalen.buildsvault.model.pob;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Spec {
+public class PoBSpec {
 
     @JacksonXmlProperty(isAttribute = true)
     private String treeVersion;
@@ -18,7 +18,7 @@ public class Spec {
 
     @JsonProperty("Sockets")
     @JacksonXmlElementWrapper(localName = "Sockets")
-    private Socket[] socket;
+    private PoBSocket[] socket;
 
     public String getTrimmedUrl() {
         return url.trim();

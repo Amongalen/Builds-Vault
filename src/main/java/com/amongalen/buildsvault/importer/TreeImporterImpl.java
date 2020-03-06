@@ -1,6 +1,6 @@
 package com.amongalen.buildsvault.importer;
 
-import com.amongalen.buildsvault.model.build.TreeNode;
+import com.amongalen.buildsvault.model.TreeNode;
 import com.amongalen.buildsvault.util.SkillTreeData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,10 +46,6 @@ public class TreeImporterImpl implements TreeImporter {
             String replaced = rawUrl.replace('-', '+').replace('_', '/').trim();
             byte[] byteValuesBase64Decoded = Base64.getDecoder().decode(replaced);
             ByteBuffer byteBuffer = ByteBuffer.wrap(byteValuesBase64Decoded);
-//            int version = byteBuffer.getInt();
-//            byte charactersId = byteBuffer.get();
-//            byte ascendancyId = byteBuffer.get();
-//            byte isLocked = byteBuffer.get();
             byteBuffer.position(7);
             CharBuffer charBuffer = byteBuffer.asCharBuffer();
             List<Integer> nodes = charBuffer.chars().boxed().collect(Collectors.toList());

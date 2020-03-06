@@ -1,19 +1,17 @@
-package com.amongalen.buildsvault.model.build;
+package com.amongalen.buildsvault.model.pob;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ConfigInput {
-    @JacksonXmlProperty(isAttribute = true)
-    String name;
+public class PoBSocket {
 
-    @JsonProperty("boolean")
     @JacksonXmlProperty(isAttribute = true)
-    String bool;
+    private String nodeId;
+
     @JacksonXmlProperty(isAttribute = true)
-    String string;
+    private String itemId;
+
 }

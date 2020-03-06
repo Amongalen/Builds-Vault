@@ -1,4 +1,4 @@
-package com.amongalen.buildsvault.model.build;
+package com.amongalen.buildsvault.model.pob;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -6,36 +6,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PathOfBuilding {
+public class PoBPathOfBuilding {
     @JsonIgnore
-    private List<TreeNode> keystones;
+
 
     @JsonProperty("Build")
-    private Build build;
+    private PoBBuild build;
 
     @JsonProperty("Calcs")
-    private Calcs calcs;
+    private PoBCalcs calcs;
 
     @JsonProperty("Skills")
-    private Skills skills;
+    private PoBSkills skills;
 
     @JsonProperty("Tree")
-    private Tree tree;
+    private PoBTree tree;
 
     @JsonProperty("Notes")
     private String notes;
 
     @JsonProperty("TreeView")
-    private TreeView treeView;
+    private PoBTreeView treeView;
 
     @JsonProperty("Items")
-    private Items items;
+    private PoBItems items;
 
     @JacksonXmlElementWrapper(localName = "Config")
     @JsonProperty("Input")
-    private ConfigInput[] configInputs;
+    private PoBConfigInput[] configInputs;
 }

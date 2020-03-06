@@ -1,7 +1,7 @@
 package com.amongalen.buildsvault.importer;
 
 import com.amongalen.buildsvault.SpringTestConfiguration;
-import com.amongalen.buildsvault.model.build.TreeNode;
+import com.amongalen.buildsvault.model.TreeNode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

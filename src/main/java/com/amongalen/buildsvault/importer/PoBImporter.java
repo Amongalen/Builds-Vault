@@ -1,7 +1,7 @@
 package com.amongalen.buildsvault.importer;
 
-import com.amongalen.buildsvault.model.build.PathOfBuilding;
+import com.amongalen.buildsvault.model.pob.PoBPathOfBuilding;
 
 public interface PoBImporter {
-    public PathOfBuilding importBuild(String pobLink);
+    PoBPathOfBuilding importBuild(String pobLink);
 }
