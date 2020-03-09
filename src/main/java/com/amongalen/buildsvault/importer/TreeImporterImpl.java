@@ -30,6 +30,7 @@ public class TreeImporterImpl implements TreeImporter {
         List<Integer> nodeIds = parseNodeIdsFromTreeUrl(urlEnd);
         List<TreeNode> treeKeystones = new ArrayList<>();
         if (nodeIds != null) {
+            log.error("nodes in build: {}", nodeIds);
             for (Integer nodeId : nodeIds) {
                 if (skillTreeData.isKeystone(nodeId)) {
                     String nodeName = skillTreeData.getNameById(nodeId);
