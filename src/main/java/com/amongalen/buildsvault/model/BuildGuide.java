@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Document(collection = "BuildGuide")
@@ -17,12 +18,16 @@ public class BuildGuide {
     private String name;
     private PoBPathOfBuilding pathOfBuilding;
     private String text;
-    private List<TreeNode> keystones;
+    private List<TreeNode> treeNodes;
 
     public BuildGuide(String name, PoBPathOfBuilding pathOfBuilding) {
         this.name = name;
         this.pathOfBuilding = pathOfBuilding;
 
+    }
+
+    public List<TreeNode> getKeystones() {
+        return treeNodes.stream().filter(TreeNode::isKeystone).collect(Collectors.toList());
     }
 
 }

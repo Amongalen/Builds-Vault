@@ -1,6 +1,8 @@
 package com.amongalen.buildsvault.util;
 
+import com.amongalen.buildsvault.model.tree.NodeGroup;
 import com.amongalen.buildsvault.model.tree.PassiveTreeData;
+import com.amongalen.buildsvault.model.tree.TreeNode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,19 @@ public class SkillTreeData {
                 log.error("Problem occurred while loading skill tree data", e);
             }
         }
+    }
+
+    public void printNodeAndGroupForId(Integer id) {
+        System.out.println("node: " + getTreeNodeForNodeId(id));
+        System.out.println("group: " + getNodeGroupForNodeId(id));
+    }
+
+    public NodeGroup getNodeGroupForNodeId(Integer id) {
+        return passiveTreeData.getGroups().values().stream().filter(g -> g.getNodeIds().contains(id)).findFirst().orElseThrow();
+    }
+
+    public TreeNode getTreeNodeForNodeId(Integer id) {
+        return passiveTreeData.getNodes().get(id);
     }
 
     public SkillTreeData(String filename) {

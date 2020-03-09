@@ -10,6 +10,8 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,27 +23,14 @@ public class TreeImporterImpl implements TreeImporter {
     final SkillTreeData skillTreeData;
 
     @Override
-    public List<TreeNode> importTreeKeystones(String treeUrl) {
+    public List<TreeNode> importTreeNodes(String treeUrl) {
         String[] urlParts = treeUrl.split("/");
         String urlEnd = urlParts[urlParts.length - 1];
         if (urlEnd.isBlank()) {
             urlEnd = urlParts[urlParts.length - 2];
         }
         List<Integer> nodeIds = parseNodeIdsFromTreeUrl(urlEnd);
-        List<TreeNode> treeKeystones = new ArrayList<>();
-        if (nodeIds != null) {
-            log.error("nodes in build: {}", nodeIds);
-            for (Integer nodeId : nodeIds) {
-                if (skillTreeData.isKeystone(nodeId)) {
-                    String nodeName = skillTreeData.getNameById(nodeId);
-                    TreeNode treeNode = new TreeNode();
-                    treeNode.setId(nodeId);
-                    treeNode.setName(nodeName);
-                    treeKeystones.add(treeNode);
-                }
-            }
-        }
-        return treeKeystones;
+        return nodeIds.stream().map(skillTreeData::getTreeNodeForNodeId).collect(Collectors.toList());
     }
 
     private static List<Integer> parseNodeIdsFromTreeUrl(String rawUrl) {
@@ -55,7 +44,7 @@ public class TreeImporterImpl implements TreeImporter {
             return nodes;
         } catch (IllegalArgumentException e) {
             log.error("Something went wrong while parsing skill tree url", e);
-            return null;
+            return Collections.emptyList();
         }
     }
 }

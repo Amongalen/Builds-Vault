@@ -5,5 +5,5 @@ import com.amongalen.buildsvault.model.tree.TreeNode;
 import java.util.List;
 
 public interface TreeImporter {
-    List<TreeNode> importTreeKeystones(String treeUrl);
+    List<TreeNode> importTreeNodes(String treeUrl);
 }
