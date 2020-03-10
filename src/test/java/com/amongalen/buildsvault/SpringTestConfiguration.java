@@ -19,4 +19,9 @@ public class SpringTestConfiguration {
     public PoBImporter poBImporter() {
         return new PoBImporterImpl();
     }
+
+    @Bean
+    public SkillTreeData skillTreeData() {
+        return new SkillTreeData();
+    }
 }

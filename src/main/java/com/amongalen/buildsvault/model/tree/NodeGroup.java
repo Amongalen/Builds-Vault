@@ -14,6 +14,6 @@ public class NodeGroup {
     Map<String, Boolean> orbitals;
     @JsonProperty("n")
     List<Integer> nodeIds;
-    float x;
-    float y;
+    double x;
+    double y;
 }
