@@ -15,6 +15,18 @@ public class PassiveTreeData {
     private List<Integer> skillsPerOrbit;
     private List<Integer> orbitRadii;
 
+    @JsonProperty("max_x")
+    private Double maxX;
+
+    @JsonProperty("max_y")
+    private Double maxY;
+
+    @JsonProperty("min_x")
+    private Double minX;
+
+    @JsonProperty("min_y")
+    private Double minY;
+
     @SuppressWarnings("unchecked")
     @JsonProperty("constants")
     private void unpackConstants(Map<String, Object> constants) {

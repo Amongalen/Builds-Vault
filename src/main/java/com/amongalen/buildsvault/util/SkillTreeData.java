@@ -5,6 +5,7 @@ import com.amongalen.buildsvault.model.tree.NodeSize;
 import com.amongalen.buildsvault.model.tree.PassiveTreeData;
 import com.amongalen.buildsvault.model.tree.TreeNode;
 import com.amongalen.buildsvault.model.tree.TreeNodeRepresentation;
+import com.amongalen.buildsvault.model.tree.TreePathRepresentation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -30,7 +32,8 @@ import java.util.stream.Collectors;
 public class SkillTreeData {
     private static final Pattern JSON_PREFIX = Pattern.compile(".*=");
     private PassiveTreeData passiveTreeData;
-    private final List<TreeNodeRepresentation> nodeRepresentations = new ArrayList<>();
+    private final Map<Integer, TreeNodeRepresentation> nodeRepresentations = new HashMap<>();
+    private final List<TreePathRepresentation> pathRepresentations = new ArrayList<>();
 
     public SkillTreeData() {
         String filename = "tree/390_V2/data.txt";
@@ -49,14 +52,39 @@ public class SkillTreeData {
         }
         if (nodeRepresentations.isEmpty()) {
             initNodeRepresentations();
+            initPathRepresentations();
         }
     }
 
-    public List<TreeNodeRepresentation> getNodeRepresentationsForTakenNodes(List<TreeNode> takenNodes) {
-        return nodeRepresentations.stream().map(node -> {
-            boolean isTaken = takenNodes.stream().anyMatch(takenNode -> takenNode.getId().equals(node.getId()));
-            return new TreeNodeRepresentation(node.getId(), node.getPositionXY(), node.getSize(), isTaken);
-        }).collect(Collectors.toList());
+    public Map<Integer, TreeNodeRepresentation> getNodeRepresentationsWithTakenNodes(List<TreeNode> takenNodes) {
+        Map<Integer, TreeNodeRepresentation> result = new HashMap<>(nodeRepresentations);
+        for (TreeNode takenNode : takenNodes) {
+            result.computeIfPresent(takenNode.getId(), (k, v) -> new TreeNodeRepresentation(v.getId(), v.getPositionXY(), v.getSize(), true));
+        }
+        return result;
+    }
+
+    public List<TreePathRepresentation> getPathRepresentationsWithTakenNodes(List<TreeNode> takenNodes) {
+        ArrayList<TreePathRepresentation> result = new ArrayList<>(pathRepresentations.size());
+        List<Integer> takenNodeIds = takenNodes.stream().map(TreeNode::getId).collect(Collectors.toList());
+        for (TreePathRepresentation pathRepresentation : pathRepresentations) {
+            boolean isTaken = false;
+            if (takenNodeIds.contains(pathRepresentation.getStartId()) && takenNodeIds.contains(pathRepresentation.getEndId())) {
+                isTaken = true;
+            }
+            TreePathRepresentation treePathRepresentationWithTakenNodes = TreePathRepresentation.builder()
+                    .startId(pathRepresentation.getStartId())
+                    .endId(pathRepresentation.getEndId())
+                    .startPosition(pathRepresentation.getStartPosition())
+                    .endPosition(pathRepresentation.getEndPosition())
+                    .isCurve(pathRepresentation.isCurve())
+                    .radius(pathRepresentation.getRadius())
+                    .isTaken(isTaken)
+                    .build();
+            result.add(treePathRepresentationWithTakenNodes);
+        }
+
+        return result;
     }
 
     private void initNodeRepresentations() {
@@ -70,7 +98,29 @@ public class SkillTreeData {
                 Pair<Double, Double> nodePosition = calculateNodePosition(group, node);
                 NodeSize nodeSize = calculateNodeSize(node);
                 TreeNodeRepresentation nodeRepresentation = new TreeNodeRepresentation(nodeId, nodePosition, nodeSize, false);
-                nodeRepresentations.add(nodeRepresentation);
+                nodeRepresentations.put(nodeId, nodeRepresentation);
+            }
+        }
+    }
+
+    private void initPathRepresentations() {
+        for (TreeNode node : passiveTreeData.getNodes().values()) {
+            for (int connectedNodeId : node.getConnectedNodes()) {
+                Pair<Double, Double> startPosition = nodeRepresentations.get(node.getId()).getPositionXY();
+                Pair<Double, Double> endPosition = nodeRepresentations.get(connectedNodeId).getPositionXY();
+                NodeGroup startingNodeGroup = getNodeGroupForNodeId(node.getId());
+                NodeGroup endNodeGroup = getNodeGroupForNodeId(connectedNodeId);
+                boolean curvedPath = startingNodeGroup.equals(endNodeGroup);
+                int radius = getRadiusForOrbit(node.getOrbitRadii());
+                TreePathRepresentation pathRepresentation = TreePathRepresentation.builder()
+                        .startId(node.getId())
+                        .endId(connectedNodeId)
+                        .startPosition(startPosition)
+                        .endPosition(endPosition)
+                        .isCurve(curvedPath)
+                        .radius(radius)
+                        .build();
+                pathRepresentations.add(pathRepresentation);
             }
         }
     }
