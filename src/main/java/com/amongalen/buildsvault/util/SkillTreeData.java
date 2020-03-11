@@ -3,10 +3,12 @@ package com.amongalen.buildsvault.util;
 import com.amongalen.buildsvault.model.tree.NodeGroup;
 import com.amongalen.buildsvault.model.tree.NodeSize;
 import com.amongalen.buildsvault.model.tree.PassiveTreeData;
+import com.amongalen.buildsvault.model.tree.PoeClass;
 import com.amongalen.buildsvault.model.tree.TreeNode;
 import com.amongalen.buildsvault.model.tree.TreeNodeRepresentation;
 import com.amongalen.buildsvault.model.tree.TreePathRepresentation;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -31,8 +33,10 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class SkillTreeData {
-    private static final Pattern JSON_PREFIX = Pattern.compile(".*=");
+    private static final Pattern JSON_SEPARATOR = Pattern.compile("[=:]");
+    private static final Pattern COMMA_AT_END = Pattern.compile(",$");
     private PassiveTreeData passiveTreeData;
+    HashMap<String, PoeClass> classAscMapping;
     private final Map<Integer, TreeNodeRepresentation> nodeRepresentations = new HashMap<>();
     private final List<TreePathRepresentation> pathRepresentations = new ArrayList<>();
 
@@ -42,11 +46,24 @@ public class SkillTreeData {
     }
 
     public void init(String filename) {
-        String json = readJson(filename);
-        if (json != null) {
+        Map<String, String> jsonVariables = readJson(filename);
+        String passiveSkillTreeDataJson = jsonVariables.get("passiveSkillTreeData");
+        String optsJson = jsonVariables.get("ascClasses");
+        if (passiveSkillTreeDataJson != null) {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                passiveTreeData = mapper.readValue(json, PassiveTreeData.class);
+                passiveTreeData = mapper.readValue(passiveSkillTreeDataJson, PassiveTreeData.class);
+            } catch (JsonProcessingException e) {
+                log.error("Problem occurred while loading skill tree data", e);
+            }
+        }
+        if (optsJson != null) {
+            try {
+                optsJson = COMMA_AT_END.matcher(optsJson).replaceAll(";");
+                ObjectMapper mapper = new ObjectMapper();
+                TypeReference<HashMap<String, PoeClass>> typeRef = new TypeReference<HashMap<String, PoeClass>>() {
+                };
+                classAscMapping = mapper.readValue(optsJson, typeRef);
             } catch (JsonProcessingException e) {
                 log.error("Problem occurred while loading skill tree data", e);
             }
@@ -60,7 +77,7 @@ public class SkillTreeData {
     public Map<Integer, TreeNodeRepresentation> getNodeRepresentationsWithTakenNodes(List<TreeNode> takenNodes) {
         Map<Integer, TreeNodeRepresentation> result = new HashMap<>(nodeRepresentations);
         for (TreeNode takenNode : takenNodes) {
-            result.computeIfPresent(takenNode.getId(), (k, v) -> new TreeNodeRepresentation(v.getId(), v.getPositionXY(), v.getSize(), true));
+            result.computeIfPresent(takenNode.getId(), (k, v) -> new TreeNodeRepresentation(v.getNode(), v.getPositionXY(), v.getSize(), true));
         }
         return result;
     }
@@ -70,12 +87,12 @@ public class SkillTreeData {
         List<Integer> takenNodeIds = takenNodes.stream().map(TreeNode::getId).collect(Collectors.toList());
         for (TreePathRepresentation pathRepresentation : pathRepresentations) {
             boolean isTaken = false;
-            if (takenNodeIds.contains(pathRepresentation.getStartId()) && takenNodeIds.contains(pathRepresentation.getEndId())) {
+            if (takenNodeIds.contains(pathRepresentation.getStartNode().getId()) && takenNodeIds.contains(pathRepresentation.getEndNode().getId())) {
                 isTaken = true;
             }
             TreePathRepresentation treePathRepresentationWithTakenNodes = TreePathRepresentation.builder()
-                    .startId(pathRepresentation.getStartId())
-                    .endId(pathRepresentation.getEndId())
+                    .startNode(pathRepresentation.getStartNode())
+                    .endNode(pathRepresentation.getEndNode())
                     .startPosition(pathRepresentation.getStartPosition())
                     .endPosition(pathRepresentation.getEndPosition())
                     .isCurve(pathRepresentation.isCurve())
@@ -99,7 +116,7 @@ public class SkillTreeData {
                 if (!node.isMastery() && node.getStartingNodes().length == 0) {
                     Pair<Double, Double> nodePosition = calculateNodePosition(group, node);
                     NodeSize nodeSize = calculateNodeSize(node);
-                    TreeNodeRepresentation nodeRepresentation = new TreeNodeRepresentation(nodeId, nodePosition, nodeSize, false);
+                    TreeNodeRepresentation nodeRepresentation = new TreeNodeRepresentation(node, nodePosition, nodeSize, false);
                     nodeRepresentations.put(nodeId, nodeRepresentation);
                 }
             }
@@ -119,8 +136,8 @@ public class SkillTreeData {
                         boolean curvedPath = startingNodeGroup.equals(endNodeGroup) && node.getOrbitRadii() == connectedNode.getOrbitRadii();
                         int radius = getRadiusForOrbit(node.getOrbitRadii());
                         TreePathRepresentation pathRepresentation = TreePathRepresentation.builder()
-                                .startId(node.getId())
-                                .endId(connectedNodeId)
+                                .startNode(node)
+                                .endNode(connectedNode)
                                 .startPosition(startPosition)
                                 .endPosition(endPosition)
                                 .isCurve(curvedPath)
@@ -154,6 +171,12 @@ public class SkillTreeData {
         return dimensions;
     }
 
+    public Integer getAscStartNodeIdByClassIdAndAscId(String classId, String ascId) {
+
+        String ascName = classAscMapping.get(classId).getAscClasses().get(ascId).getName();
+        return passiveTreeData.getNodes().values().stream().filter(o -> Objects.equals(o.getName(), ascName)).map(TreeNode::getId).findFirst().orElse(0);
+    }
+
     public NodeGroup getNodeGroupForNodeId(Integer id) {
         return passiveTreeData.getGroups().values().stream().filter(g -> g.getNodeIds().contains(id)).findFirst().orElseThrow();
     }
@@ -182,20 +205,24 @@ public class SkillTreeData {
         return passiveTreeData.getOrbitRadii().get(orbit);
     }
 
-    private static String readJson(String filename) {
+    private static Map<String, String> readJson(String filename) {
+        Map<String, String> jsonVariables = new HashMap<>();
         try {
             Resource resource = new ClassPathResource(filename);
             try (InputStream input = resource.getInputStream()) {
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
-                    String line = br.readLine();
-                    String result = JSON_PREFIX.matcher(line).replaceFirst("");
-                    return result;
+                    jsonVariables = br.lines()
+                            .map(input1 -> JSON_SEPARATOR.split(input1, 2))
+                            .filter(split -> split.length == 2)
+                            .collect(Collectors.toMap(split -> split[0].replace("var", "").trim(),
+                                    split -> split[1].trim(),
+                                    (v1, v2) -> v1));
                 }
             }
         } catch (IOException e) {
             log.error("Problem occured while loading skill tree data", e);
         }
-        return null;
+        return jsonVariables;
     }
 
     private static NodeSize calculateNodeSize(TreeNode node) {

@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,14 +31,22 @@ public class TreeImporterImpl implements TreeImporter {
         return nodeIds.stream().map(skillTreeData::getTreeNodeForNodeId).collect(Collectors.toList());
     }
 
-    private static List<Integer> parseNodeIdsFromTreeUrl(String rawUrl) {
+    private List<Integer> parseNodeIdsFromTreeUrl(String rawUrl) {
         try {
             String replaced = rawUrl.replace('-', '+').replace('_', '/').trim();
             byte[] byteValuesBase64Decoded = Base64.getDecoder().decode(replaced);
             ByteBuffer byteBuffer = ByteBuffer.wrap(byteValuesBase64Decoded);
-            byteBuffer.position(7);
+            int version = byteBuffer.getInt();
+            byte charactersId = byteBuffer.get();
+            byte ascendancyId = byteBuffer.get();
+            byte isLocked = byteBuffer.get();
             CharBuffer charBuffer = byteBuffer.asCharBuffer();
             List<Integer> nodes = charBuffer.chars().boxed().collect(Collectors.toList());
+            if (ascendancyId > 0) {
+                Integer ascStartNodeId = skillTreeData.getAscStartNodeIdByClassIdAndAscId(Byte.toString(charactersId), Byte.toString(ascendancyId));
+                nodes.add(ascStartNodeId);
+            }
+
             return nodes;
         } catch (IllegalArgumentException e) {
             log.error("Something went wrong while parsing skill tree url", e);
