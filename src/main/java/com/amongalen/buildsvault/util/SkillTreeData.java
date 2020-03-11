@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -95,40 +96,62 @@ public class SkillTreeData {
             List<Integer> nodeIdsInGroup = group.getNodeIds();
             for (Integer nodeId : nodeIdsInGroup) {
                 TreeNode node = allNodes.get(nodeId);
-                Pair<Double, Double> nodePosition = calculateNodePosition(group, node);
-                NodeSize nodeSize = calculateNodeSize(node);
-                TreeNodeRepresentation nodeRepresentation = new TreeNodeRepresentation(nodeId, nodePosition, nodeSize, false);
-                nodeRepresentations.put(nodeId, nodeRepresentation);
+                if (!node.isMastery() && node.getStartingNodes().length == 0) {
+                    Pair<Double, Double> nodePosition = calculateNodePosition(group, node);
+                    NodeSize nodeSize = calculateNodeSize(node);
+                    TreeNodeRepresentation nodeRepresentation = new TreeNodeRepresentation(nodeId, nodePosition, nodeSize, false);
+                    nodeRepresentations.put(nodeId, nodeRepresentation);
+                }
             }
         }
     }
 
     private void initPathRepresentations() {
         for (TreeNode node : passiveTreeData.getNodes().values()) {
-            for (int connectedNodeId : node.getConnectedNodes()) {
-                Pair<Double, Double> startPosition = nodeRepresentations.get(node.getId()).getPositionXY();
-                Pair<Double, Double> endPosition = nodeRepresentations.get(connectedNodeId).getPositionXY();
-                NodeGroup startingNodeGroup = getNodeGroupForNodeId(node.getId());
-                NodeGroup endNodeGroup = getNodeGroupForNodeId(connectedNodeId);
-                boolean curvedPath = startingNodeGroup.equals(endNodeGroup);
-                int radius = getRadiusForOrbit(node.getOrbitRadii());
-                TreePathRepresentation pathRepresentation = TreePathRepresentation.builder()
-                        .startId(node.getId())
-                        .endId(connectedNodeId)
-                        .startPosition(startPosition)
-                        .endPosition(endPosition)
-                        .isCurve(curvedPath)
-                        .radius(radius)
-                        .build();
-                pathRepresentations.add(pathRepresentation);
+            if (!node.isMastery() && node.getStartingNodes().length == 0) {
+                for (int connectedNodeId : node.getConnectedNodes()) {
+                    TreeNode connectedNode = passiveTreeData.getNodes().get(connectedNodeId);
+                    if (areConnected(node, connectedNode)) {
+                        Pair<Double, Double> startPosition = nodeRepresentations.get(node.getId()).getPositionXY();
+                        Pair<Double, Double> endPosition = nodeRepresentations.get(connectedNodeId).getPositionXY();
+                        NodeGroup startingNodeGroup = getNodeGroupForNodeId(node.getId());
+                        NodeGroup endNodeGroup = getNodeGroupForNodeId(connectedNodeId);
+                        boolean curvedPath = startingNodeGroup.equals(endNodeGroup) && node.getOrbitRadii() == connectedNode.getOrbitRadii();
+                        int radius = getRadiusForOrbit(node.getOrbitRadii());
+                        TreePathRepresentation pathRepresentation = TreePathRepresentation.builder()
+                                .startId(node.getId())
+                                .endId(connectedNodeId)
+                                .startPosition(startPosition)
+                                .endPosition(endPosition)
+                                .isCurve(curvedPath)
+                                .radius(radius)
+                                .build();
+                        pathRepresentations.add(pathRepresentation);
+                    }
+                }
             }
         }
     }
 
+    private static boolean areConnected(TreeNode node, TreeNode connectedNode) {
+        return !node.isMastery()
+                && node.getStartingNodes().length == 0
+                && !connectedNode.isMastery()
+                && connectedNode.getStartingNodes().length == 0
+                && Objects.equals(connectedNode.getAscendancyName(), node.getAscendancyName());
+    }
 
-    public void printNodeAndGroupForId(Integer id) {
-        System.out.println("node: " + getTreeNodeForNodeId(id));
-        System.out.println("group: " + getNodeGroupForNodeId(id));
+    public Map<String, Double> getTreeDimensions() {
+        Map<String, Double> dimensions = new HashMap<>();
+        Double minX = passiveTreeData.getMinX();
+        Double minY = passiveTreeData.getMinY();
+        double xSize = passiveTreeData.getMaxX() - minX;
+        double ySize = passiveTreeData.getMaxY() - minY;
+        dimensions.put("minX", minX);
+        dimensions.put("minY", minY);
+        dimensions.put("xSize", xSize);
+        dimensions.put("ySize", ySize);
+        return dimensions;
     }
 
     public NodeGroup getNodeGroupForNodeId(Integer id) {
@@ -193,7 +216,7 @@ public class SkillTreeData {
         Integer orbitRadius = getRadiusForOrbit(orbitNumber);
         double middleX = group.getX();
         double middleY = group.getY();
-        double angleDegrees = 360d - ((360d / nodesPerOrbit) * orbitIndex - 90d);
+        double angleDegrees = ((360d / nodesPerOrbit) * orbitIndex - 90d);
         double angleRadians = Math.toRadians(angleDegrees);
         double resultX = Math.cos(angleRadians) * orbitRadius + middleX;
         double resultY = Math.sin(angleRadians) * orbitRadius + middleY;

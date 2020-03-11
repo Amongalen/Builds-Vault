@@ -8,7 +8,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface SkillTreeService {
-    Map<Integer, TreeNodeRepresentation> getTreeNodeRepresentations(List<TreeNode> takenNodes);
-
-    List<TreePathRepresentation> getTreePathRepresentation(List<TreeNode> takenNodes);
+    String getTreeRepresentation(List<TreeNode> takenNodes);
 }

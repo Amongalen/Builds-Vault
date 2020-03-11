@@ -11,6 +11,8 @@ public class TreeNode {
     Integer id;
     @JsonProperty("dn")
     String name;
+    @JsonProperty("ascendancyName")
+    String ascendancyName;
     @JsonProperty("ks")
     boolean isKeystone;
     @JsonProperty("m")
@@ -23,6 +25,8 @@ public class TreeNode {
     int orbitIndex;
     @JsonProperty("out")
     int[] connectedNodes;
+    @JsonProperty("spc")
+    int[] startingNodes;
 
 
 }

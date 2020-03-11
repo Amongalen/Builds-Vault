@@ -26,9 +26,10 @@ public class BuildGuideDetailsController {
 
         BuildGuide guide = guideOptional.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
         model.addAttribute("guide", guide);
-        List<TreeNode> treeNodes = guide.getTreeNodes();
-        model.addAttribute("treeNodes", skillTreeService.getTreeNodeRepresentations(treeNodes).values());
-        model.addAttribute("treePaths", skillTreeService.getTreePathRepresentation(treeNodes));
+
+        List<TreeNode> takenNodes = guide.getTreeNodes();
+        String treeRepresentation = skillTreeService.getTreeRepresentation(takenNodes);
+        model.addAttribute("tree", treeRepresentation);
         return "buildGuide";
     }
 }
