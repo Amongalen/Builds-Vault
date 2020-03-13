@@ -98,6 +98,7 @@ public class SkillTreeData {
                     .isCurve(pathRepresentation.isCurve())
                     .radius(pathRepresentation.getRadius())
                     .isTaken(isTaken)
+                    .isClockWise(pathRepresentation.isClockWise())
                     .build();
             result.add(treePathRepresentationWithTakenNodes);
         }
@@ -137,6 +138,7 @@ public class SkillTreeData {
                         TreeNode endNode = connectedNode;
                         boolean curvedPath = startingNodeGroup.equals(endNodeGroup) && node.getOrbitRadii() == connectedNode.getOrbitRadii();
                         int radius = getRadiusForOrbit(node.getOrbitRadii());
+                        boolean areClockWise = areClockWise(startPosition, endPosition, startingNodeGroup);
                         TreePathRepresentation pathRepresentation = TreePathRepresentation.builder()
                                 .startNode(startNode)
                                 .endNode(endNode)
@@ -144,7 +146,7 @@ public class SkillTreeData {
                                 .endPosition(endPosition)
                                 .isCurve(curvedPath)
                                 .radius(radius)
-                                .areClockWise(areClockWise(startPosition,endPosition,startingNodeGroup))
+                                .isClockWise(areClockWise)
                                 .build();
                         pathRepresentations.add(pathRepresentation);
                     }
@@ -156,9 +158,10 @@ public class SkillTreeData {
     private static boolean areClockWise(Pair<Double, Double> startPosition, Pair<Double, Double> endPosition, NodeGroup centerPoint) {
         double centerX = centerPoint.getX();
         double centerY = centerPoint.getY();
+        double det = (startPosition.getFirst() - centerX) * (endPosition.getSecond() - centerY) - (endPosition.getFirst() - centerX) * (startPosition.getSecond() - centerY);
         double a1 = (Math.toDegrees(Math.atan2(startPosition.getFirst() - centerX, startPosition.getSecond() - centerY)) + 360) % 360;
         double a2 = (Math.toDegrees(Math.atan2(endPosition.getFirst() - centerX, endPosition.getSecond() - centerY)) + 360) % 360;
-        return (a1 - a2) >= 0;
+        return det <= 0;
     }
 
     private static boolean areConnected(TreeNode node, TreeNode connectedNode) {
