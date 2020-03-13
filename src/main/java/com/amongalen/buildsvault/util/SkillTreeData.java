@@ -61,7 +61,7 @@ public class SkillTreeData {
             try {
                 optsJson = COMMA_AT_END.matcher(optsJson).replaceAll(";");
                 ObjectMapper mapper = new ObjectMapper();
-                TypeReference<HashMap<String, PoeClass>> typeRef = new TypeReference<HashMap<String, PoeClass>>() {
+                TypeReference<HashMap<String, PoeClass>> typeRef = new TypeReference<>() {
                 };
                 classAscMapping = mapper.readValue(optsJson, typeRef);
             } catch (JsonProcessingException e) {
@@ -133,21 +133,32 @@ public class SkillTreeData {
                         Pair<Double, Double> endPosition = nodeRepresentations.get(connectedNodeId).getPositionXY();
                         NodeGroup startingNodeGroup = getNodeGroupForNodeId(node.getId());
                         NodeGroup endNodeGroup = getNodeGroupForNodeId(connectedNodeId);
+                        TreeNode startNode = node;
+                        TreeNode endNode = connectedNode;
                         boolean curvedPath = startingNodeGroup.equals(endNodeGroup) && node.getOrbitRadii() == connectedNode.getOrbitRadii();
                         int radius = getRadiusForOrbit(node.getOrbitRadii());
                         TreePathRepresentation pathRepresentation = TreePathRepresentation.builder()
-                                .startNode(node)
-                                .endNode(connectedNode)
+                                .startNode(startNode)
+                                .endNode(endNode)
                                 .startPosition(startPosition)
                                 .endPosition(endPosition)
                                 .isCurve(curvedPath)
                                 .radius(radius)
+                                .areClockWise(areClockWise(startPosition,endPosition,startingNodeGroup))
                                 .build();
                         pathRepresentations.add(pathRepresentation);
                     }
                 }
             }
         }
+    }
+
+    private static boolean areClockWise(Pair<Double, Double> startPosition, Pair<Double, Double> endPosition, NodeGroup centerPoint) {
+        double centerX = centerPoint.getX();
+        double centerY = centerPoint.getY();
+        double a1 = (Math.toDegrees(Math.atan2(startPosition.getFirst() - centerX, startPosition.getSecond() - centerY)) + 360) % 360;
+        double a2 = (Math.toDegrees(Math.atan2(endPosition.getFirst() - centerX, endPosition.getSecond() - centerY)) + 360) % 360;
+        return (a1 - a2) >= 0;
     }
 
     private static boolean areConnected(TreeNode node, TreeNode connectedNode) {

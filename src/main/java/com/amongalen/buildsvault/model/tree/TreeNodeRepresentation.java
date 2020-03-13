@@ -17,7 +17,7 @@ public class TreeNodeRepresentation implements DrawableTreeElementRepresentation
         Double posX = positionXY.getFirst();
         Double posY = positionXY.getSecond();
         int radius = size.getRadius();
-        String svgCircle = String.format("<circle cx=\"%s\" cy=\"%s\" r=\"%d\" fill=\"%s\"/>\n", posX, posY, radius, getColor());
+        String svgCircle = String.format("<circle cx=\"%s\" cy=\"%s\" r=\"%d\" fill=\"%s\">%d</circle>\n", posX, posY, radius, getColor(), node.getId());
         return svgCircle;
     }
 }
