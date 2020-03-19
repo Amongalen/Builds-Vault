@@ -1,7 +1,7 @@
 package com.amongalen.buildsvault.exporter;
 
 import com.amongalen.buildsvault.model.pob.PoBPathOfBuilding;
-import com.amongalen.buildsvault.util.CompressionUtils;
+import com.amongalen.buildsvault.utils.CompressionUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;

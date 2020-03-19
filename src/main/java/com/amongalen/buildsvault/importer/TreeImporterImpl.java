@@ -1,7 +1,7 @@
 package com.amongalen.buildsvault.importer;
 
 import com.amongalen.buildsvault.model.tree.TreeNode;
-import com.amongalen.buildsvault.util.SkillTreeData;
+import com.amongalen.buildsvault.utils.SkillTreeData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

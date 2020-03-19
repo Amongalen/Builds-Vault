@@ -1,8 +1,6 @@
-package com.amongalen.buildsvault.util;
+package com.amongalen.buildsvault.utils;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SkillTreeDataTest {
 

@@ -1,4 +1,4 @@
-package com.amongalen.buildsvault.util;
+package com.amongalen.buildsvault.utils;
 
 import com.amongalen.buildsvault.model.tree.NodeGroup;
 import com.amongalen.buildsvault.model.tree.NodeSize;

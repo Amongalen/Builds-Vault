@@ -4,7 +4,7 @@ import com.amongalen.buildsvault.model.tree.DrawableTreeElementRepresentation;
 import com.amongalen.buildsvault.model.tree.TreeNode;
 import com.amongalen.buildsvault.model.tree.TreeNodeRepresentation;
 import com.amongalen.buildsvault.model.tree.TreePathRepresentation;
-import com.amongalen.buildsvault.util.SkillTreeData;
+import com.amongalen.buildsvault.utils.SkillTreeData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

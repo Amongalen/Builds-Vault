@@ -4,7 +4,7 @@ import com.amongalen.buildsvault.importer.PoBImporter;
 import com.amongalen.buildsvault.importer.PoBImporterImpl;
 import com.amongalen.buildsvault.importer.TreeImporter;
 import com.amongalen.buildsvault.importer.TreeImporterImpl;
-import com.amongalen.buildsvault.util.SkillTreeData;
+import com.amongalen.buildsvault.utils.SkillTreeData;
 import org.springframework.context.annotation.Bean;
 
 public class SpringTestConfiguration {

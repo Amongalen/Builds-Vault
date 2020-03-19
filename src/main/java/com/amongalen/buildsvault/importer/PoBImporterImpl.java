@@ -1,7 +1,7 @@
 package com.amongalen.buildsvault.importer;
 
 import com.amongalen.buildsvault.model.pob.PoBPathOfBuilding;
-import com.amongalen.buildsvault.util.CompressionUtils;
+import com.amongalen.buildsvault.utils.CompressionUtils;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.AllArgsConstructor;

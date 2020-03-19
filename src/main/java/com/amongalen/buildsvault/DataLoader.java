@@ -7,7 +7,7 @@ import com.amongalen.buildsvault.model.BuildGuide;
 import com.amongalen.buildsvault.model.pob.PoBPathOfBuilding;
 import com.amongalen.buildsvault.model.tree.TreeNode;
 import com.amongalen.buildsvault.repository.BuildGuideRepository;
-import com.amongalen.buildsvault.util.SkillTreeData;
+import com.amongalen.buildsvault.utils.SkillTreeData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
