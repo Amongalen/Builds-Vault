@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New build</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/custom-simplemde.css}"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.9.0/github-markdown.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css"/>
+<!--    <link type="text/css" href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{css/bootstrap.css}"-->
+<!--          media="screen"/>-->
+<!--    <link type="text/css" href="../static/css/core.css" rel="stylesheet" th:href="@{css/core.css}"/>-->
+</head>
+<body class="bg-secondary">
+<div th:replace="fragments/header :: header">
+</div>
+<div class="container-with-aside">
+    <div class="middle-column">
+        <div class="column-header">
+            <form th:action="@{/admin/article/write}" method="post">
+                <button class="header-action create" type="submit">test1</button>
+            </form>
+        </div>
+    </div>
+    <div class="writting-area">
+        <textarea id="build-editor"></textarea>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.9/marked.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript" th:src="@{/js/markdown.js}"></script>
+<script type="text/javascript" th:src="@{/js/purify.js}"></script>
+</body>
+</html>
